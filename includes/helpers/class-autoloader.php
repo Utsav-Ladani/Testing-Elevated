@@ -9,7 +9,10 @@
 
 namespace Testing_Elevated\Includes\Helpers;
 
+use Testing_Elevated\Includes\Traits\Singleton;
+
 require_once __DIR__ . '/autoloader.config.php';
+require_once PLUGIN_DIR . 'includes/traits/trait-singleton.php';
 
 /**
  * TE_Autoloader class.
@@ -19,6 +22,11 @@ require_once __DIR__ . '/autoloader.config.php';
  * It works only for the classes which are in the namespace defined autoloader.config.php file.
  */
 final class TE_Autoloader {
+	/**
+	 * Use Singleton trait.
+	 */
+	use Singleton;
+
 	/**
 	 * Plugin namespace.
 	 * It is used to check whether the resource belongs to the plugin or not.
@@ -211,4 +219,4 @@ final class TE_Autoloader {
 	}
 }
 
-new TE_Autoloader();
+TE_Autoloader::get_instance();

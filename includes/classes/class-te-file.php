@@ -30,6 +30,10 @@ class TE_File {
 	public function read( string $relative_path ) : string {
 		$absolute_path = $this->get_absolute_path( $relative_path );
 
+		if ( ! file_exists( $absolute_path ) ) {
+			return '';
+		}
+
 		return file_get_contents( $absolute_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 	}
 

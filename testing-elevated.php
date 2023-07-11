@@ -12,3 +12,20 @@
  * @package testing-elevated
  */
 
+namespace Testing_Elevated;
+
+require_once __DIR__ . '/includes/helpers/class-autoloader.php';
+
+use Testing_Elevated\Includes\Classes\TE_Activation;
+use Testing_Elevated\Includes\Classes\TE_AJAX;
+use Testing_Elevated\Includes\Classes\TE_UI;
+
+// Register activation hook.
+register_activation_hook( __FILE__, array( TE_Activation::get_instance(), 'activate' ) );
+
+// Register deactivation hook.
+register_deactivation_hook( __FILE__, array( TE_Activation::get_instance(), 'deactivate' ) );
+
+// Register AJAX hooks.
+TE_AJAX::get_instance();
+TE_UI::get_instance();

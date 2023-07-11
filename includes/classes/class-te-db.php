@@ -25,10 +25,20 @@ class TE_DB {
 	 * It is a private constructor to prevent direct object creation.
 	 */
 	private function __construct() {
+		// disable testing environment for self ajax requests.
+		if ( TE_AJAX::get_instance()->is_te_ajax_request() ) {
+			return;
+		}
+
 		// Use SAVEQUERIES to store all the queries.
 		define( 'SAVEQUERIES', true );
 
 		$this->init_db();
+
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+
 		$this->start();
 		$this->fire_old_queries();
 		$this->end();
@@ -52,6 +62,17 @@ class TE_DB {
 	}
 
 	/**
+	 * Check if the testing is enabled.
+	 *
+	 * @return bool
+	 */
+	public function is_enabled() : bool {
+		global $wpdb;
+
+		return '1' === $wpdb->get_var( "SELECT option_value FROM wp_options WHERE option_name = 'TE_Status'" );
+	}
+
+	/**
 	 * Start testing.
 	 * It sets the autocommit to false.
 	 *
@@ -71,6 +92,7 @@ class TE_DB {
 		global $wpdb;
 
 		$wpdb->query( 'COMMIT' );
+		$wpdb->query( 'SET autocommit = 1' );
 	}
 
 	/**
@@ -80,9 +102,8 @@ class TE_DB {
 	 * @return void
 	 */
 	public function rollback() : void {
-		global $wpdb;
-
-		$wpdb->query( 'ROLLBACK' );
+		// delete all the queries so next time they don't execute.
+		TE_Query::get_instance()->delete();
 	}
 
 	/**
@@ -132,6 +153,21 @@ class TE_DB {
 		foreach ( $query as $sql ) {
 			$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
+	}
+
+	/**
+	 * Clean up after committing the changes.
+	 *
+	 * @return void
+	 */
+	public function cleanup() : void {
+		global $wpdb;
+
+		// delete all the queries.
+		TE_Query::get_instance()->delete();
+
+		// delete all the options.
+		$wpdb->query( "DELETE FROM wp_options WHERE option_name LIKE 'TE_Status'" );
 	}
 }
 

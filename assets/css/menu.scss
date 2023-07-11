@@ -1,0 +1,102 @@
+/**
+ * Style for the right menu of Testing Elevated plugin
+ */
+
+:root {
+	--te-menu-color: dodgerblue;
+	--te-menu-color-dark: #000;
+	--te-menu-color-secondary: #fff;
+	--te-menu-bg-color: #000;
+	--te-menu-bg-color-secondary: dodgerblue;
+	--te-menu-bg-color-secondary-lighter: #d7edff;
+}
+
+.te-menu-wrapper {
+	font-size: 20px;
+
+	position: fixed;
+	right: 0;
+	top: 5em;
+
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: center;
+
+	z-index: 200;
+}
+
+.te-menu__title {
+	color: var(--te-menu-color);
+	background: var(--te-menu-bg-color);
+
+	padding: .6em 1.6em .6em .6em;
+
+	border-bottom-left-radius: .3em;
+	border-top-left-radius: .3em;
+
+	box-shadow: 0 0 1em rgba(0,0,0,.6);
+	cursor: pointer;
+
+	z-index: 201;
+	line-height: 0;
+}
+
+.te-menu-wrapper:hover .te-menu__title {
+	color: var(--te-menu-color-dark);
+	background: var(--te-menu-bg-color-secondary-lighter);
+}
+
+.te-menu__title__image {
+	width: auto;
+	height: 2em;
+	object-fit: cover;
+}
+
+.te-menu {
+	color: var(--te-menu-color);
+	background: var(--te-menu-bg-color);
+	padding: 0;
+	margin: 0;
+	display: flex;
+	border-radius: .3em;
+	overflow: hidden;
+	max-width: 0;
+
+	transition: transform .2s ease-in-out, max-width .2s ease-in-out, margin-right .2s ease-in-out;
+	transform: translateX(110%);
+}
+
+.te-menu-wrapper:hover > .te-menu{
+	transform: translateX(0);
+	max-width: 14em;
+	margin-right: .6em;
+	box-shadow: 0 0 1em rgba(0,0,0,.6);
+}
+
+.te-menu__item {
+	list-style: none;
+	padding: .6em;
+	cursor: pointer;
+	margin: 0;
+	font-size: .8em;
+
+	line-height: 1.4em;
+}
+
+.te-menu__item:hover {
+	color: var(--te-menu-color-dark);
+	background: var(--te-menu-bg-color-secondary-lighter);
+}
+
+.te-menu__item--active {
+	color: var(--te-menu-color-secondary);
+	background: var(--te-menu-bg-color-secondary);
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.te-menu__item--disabled {
+	opacity: .5;
+	cursor: not-allowed;
+	pointer-events: none;
+}

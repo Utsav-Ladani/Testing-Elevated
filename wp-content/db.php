@@ -17,3 +17,5 @@ use Testing_Elevated\Includes\Classes\TE_DB;
  * It defines the global $wpdb and starts the testing environment.
  */
 TE_DB::get_instance();
+
+

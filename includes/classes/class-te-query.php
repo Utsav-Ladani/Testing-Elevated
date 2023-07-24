@@ -83,7 +83,7 @@ class TE_Query {
 			$queries,
 			function( $query ) {
 				// Allow only INSERT, UPDATE and DELETE queries.
-				return preg_match( '/^(INSERT|UPDATE|DELETE)/i', $query );
+				return preg_match( '/^(INSERT|UPDATE|DELETE)/i', $query['query'] );
 			}
 		);
 	}

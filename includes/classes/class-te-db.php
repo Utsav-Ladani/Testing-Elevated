@@ -58,7 +58,7 @@ class TE_DB {
 		$db_name     = defined( 'DB_NAME' ) ? DB_NAME : '';
 		$db_host     = defined( 'DB_HOST' ) ? DB_HOST : '';
 
-		$wpdb = new \wpdb( $db_user, $db_password, $db_name, $db_host ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$wpdb = new TE_DB_Drop_Ins( $db_user, $db_password, $db_name, $db_host );
 	}
 
 	/**
@@ -127,14 +127,11 @@ class TE_DB {
 	public function record_queries() : void {
 		global $wpdb;
 
-		$queries = $wpdb->queries ?? array();
+		$queries = TE_DB_Drop_Ins::$te_queries;
 
-		$queries = array_map(
-			function( $query ) {
-				return $query[0];
-			},
-			$queries
-		);
+		// print_r( '<pre> UtsavLadani' );
+		// print_r( var_dump( $queries ) );
+		// print_r( '</pre>' );
 
 		TE_Query::get_instance()->save( $queries );
 	}
@@ -148,10 +145,15 @@ class TE_DB {
 	public function fire_old_queries() : void {
 		global $wpdb;
 
-		$query = TE_Query::get_instance()->get();
+		$queries = TE_Query::get_instance()->get();
 
-		foreach ( $query as $sql ) {
-			$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		foreach ( $queries as $query ) {
+			$result = $wpdb->query( $query['query'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+			if( $query['type'] === 'insert' ) {
+				// get the table name from the query.
+				$wpdb->update( $query['table'], array( 'id' => $query['id'] ), array( 'id' => $wpdb->insert_id ) );
+			}
 		}
 	}
 

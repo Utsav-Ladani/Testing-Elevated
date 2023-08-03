@@ -14,6 +14,11 @@ use Testing_Elevated\Includes\Traits\Singleton;
 require_once __DIR__ . '/autoloader.config.php';
 require_once PLUGIN_DIR . 'includes/traits/trait-singleton.php';
 
+// Bailout, if exists.
+if ( class_exists( 'Testing_Elevated\Includes\Helpers\TE_Autoloader' ) ) {
+	return;
+}
+
 /**
  * TE_Autoloader class.
  * It loads the resources like class, trait, etc. automatically when needed.

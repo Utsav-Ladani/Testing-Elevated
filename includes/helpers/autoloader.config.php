@@ -18,12 +18,16 @@ namespace Testing_Elevated;
  *
  * @const string PLUGIN_NAMESPACE Plugin namespace.
  */
-define( 'PLUGIN_NAMESPACE', 'Testing_Elevated' );
+if ( ! defined( 'PLUGIN_NAMESPACE' ) ) {
+	define( 'PLUGIN_NAMESPACE', 'Testing_Elevated' );
+}
 
 /**
  * Plugin directory path.
  *
  * @const string PLUGIN_DIR Plugin directory path.
  */
-define( 'PLUGIN_DIR', WP_CONTENT_DIR . '/plugins/testing-elevated/' );
+if ( ! defined( 'PLUGIN_DIR' ) ) {
+	define( 'PLUGIN_DIR', WP_CONTENT_DIR . '/plugins/testing-elevated/' );
+}
 

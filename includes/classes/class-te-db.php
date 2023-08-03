@@ -12,162 +12,91 @@ use Testing_Elevated\Includes\Traits\Singleton;
 
 /**
  * Class TE_DB
- * It handles all the database related operations.
+ * Custom database class extends wpdb.
  */
-class TE_DB {
+class TE_DB extends \wpdb {
 	/**
-	 * Use Singleton trait.
+	 * Store all the queries.
+	 *
+	 * @var array $te_queries
 	 */
-	use Singleton;
+	public static $te_queries = array();
 
 	/**
-	 * TE_DB constructor.
-	 * It is a private constructor to prevent direct object creation.
+	 * Store current query.
+	 *
+	 * @var array $current_te_query
 	 */
-	private function __construct() {
-		// disable testing environment for self ajax requests.
-		if ( TE_AJAX::get_instance()->is_te_ajax_request() ) {
-			return;
+	public $current_te_query = array();
+
+	/**
+	 * Override the wpdb query function.
+	 *
+	 * @param string $query SQL query string.
+	 *
+	 * @return bool|int|\mysqli_result|resource|null
+	 */
+	public function query( $query ) {
+		$result = parent::query( $query );
+
+		// If the query is to fix the previous INSERT query, then return the result and don't record.
+		if ( is_array( $this->current_te_query ) && isset( $this->current_te_query->insert_correct_query ) && $this->current_te_query->insert_correct_query ) {
+			return $result;
 		}
 
-		// Use SAVEQUERIES to store all the queries.
-		define( 'SAVEQUERIES', true );
+		self::$te_queries[] = $this->get_te_query( $query );
 
-		$this->init_db();
+		return $result;
+	}
 
-		if ( ! $this->is_enabled() ) {
-			return;
+	/**
+	 * Create the TE query with extra parameters.
+	 *
+	 * @param string $query SQL query string.
+	 *
+	 * @return array
+	 */
+	private function get_te_query( string $query ): array {
+		if ( str_starts_with( $query, 'INSERT' ) ) {
+
+			$table_name = explode( ' ', $query )[2];
+			$table_name = str_replace( '`', '', $table_name );
+			$table_name = str_replace( '\'', '', $table_name );
+			$table_name = str_replace( '"', '', $table_name );
+
+			return array(
+				'query' => $query,
+				'type'  => 'insert',
+				'id'    => $this->insert_id,
+				'table' => $table_name,
+			);
 		}
 
-		$this->start();
-		$this->fire_old_queries();
-		$this->end();
-	}
+		if ( str_starts_with( $query, 'UPDATE' ) ) {
+			return array(
+				'query' => $query,
+				'type'  => 'update',
+			);
+		}
 
-	/**
-	 * Initialize the database.
-	 * It assigns db instance to global $wpdb.
-	 *
-	 * @return void
-	 */
-	public function init_db() : void {
-		global $wpdb;
+		if ( str_starts_with( $query, 'DELETE' ) ) {
+			return array(
+				'query' => $query,
+				'type'  => 'delete',
+			);
+		}
 
-		$db_user     = defined( 'DB_USER' ) ? DB_USER : '';
-		$db_password = defined( 'DB_PASSWORD' ) ? DB_PASSWORD : '';
-		$db_name     = defined( 'DB_NAME' ) ? DB_NAME : '';
-		$db_host     = defined( 'DB_HOST' ) ? DB_HOST : '';
+		if ( str_starts_with( $query, 'SELECT' ) ) {
+			return array(
+				'query' => $query,
+				'type'  => 'select',
+			);
+		}
 
-		$wpdb = new \wpdb( $db_user, $db_password, $db_name, $db_host ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-	}
-
-	/**
-	 * Check if the testing is enabled.
-	 *
-	 * @return bool
-	 */
-	public function is_enabled() : bool {
-		global $wpdb;
-
-		return '1' === $wpdb->get_var( "SELECT option_value FROM wp_options WHERE option_name = 'TE_Status'" );
-	}
-
-	/**
-	 * Start testing.
-	 * It sets the autocommit to false.
-	 *
-	 * @return void
-	 */
-	public function start() : void {
-		global $wpdb;
-
-		$wpdb->query( 'SET autocommit = 0' );
-	}
-
-	/**
-	 * Commit testing.
-	 * It commits all the queries.
-	 */
-	public function commit() : void {
-		global $wpdb;
-
-		$wpdb->query( 'COMMIT' );
-		$wpdb->query( 'SET autocommit = 1' );
-	}
-
-	/**
-	 * Rollback testing.
-	 * It rolls back all the queries.
-	 *
-	 * @return void
-	 */
-	public function rollback() : void {
-		// delete all the queries so next time they don't execute.
-		TE_Query::get_instance()->delete();
-	}
-
-	/**
-	 * End testing.
-	 * It commits all the queries.
-	 *
-	 * @return void
-	 */
-	public function end() : void {
-		register_shutdown_function( array( $this, 'record_queries' ) );
-	}
-
-	/**
-	 * Record all queries.
-	 * It records all the queries fired during the test.
-	 *
-	 * @hook query
-	 *
-	 * @return void
-	 */
-	public function record_queries() : void {
-		global $wpdb;
-
-		$queries = $wpdb->queries ?? array();
-
-		$queries = array_map(
-			function( $query ) {
-				return $query[0];
-			},
-			$queries
+		return array(
+			'query' => $query,
+			'type'  => 'unknown',
 		);
-
-		TE_Query::get_instance()->save( $queries );
-	}
-
-	/**
-	 * Fire old queries.
-	 * It fires all the queries recorded during the test.
-	 *
-	 * @return void
-	 */
-	public function fire_old_queries() : void {
-		global $wpdb;
-
-		$query = TE_Query::get_instance()->get();
-
-		foreach ( $query as $sql ) {
-			$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		}
-	}
-
-	/**
-	 * Clean up after committing the changes.
-	 *
-	 * @return void
-	 */
-	public function cleanup() : void {
-		global $wpdb;
-
-		// delete all the queries.
-		TE_Query::get_instance()->delete();
-
-		// delete all the options.
-		$wpdb->query( "DELETE FROM wp_options WHERE option_name LIKE 'TE_Status'" );
 	}
 }
 

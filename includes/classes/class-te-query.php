@@ -54,7 +54,7 @@ class TE_Query {
 		$data = array(
 			'queries' => $queries,
 			'date'    => time(),
-			'version' => '1.0.0',
+			'version' => '1.0.1',
 		);
 
 		$json_encoded_data = wp_json_encode( $data );
@@ -83,7 +83,7 @@ class TE_Query {
 			$queries,
 			function( $query ) {
 				// Allow only INSERT, UPDATE and DELETE queries.
-				return preg_match( '/^(INSERT|UPDATE|DELETE)/i', $query );
+				return in_array( $query['type'], array( 'insert', 'update', 'delete' ), true );
 			}
 		);
 	}

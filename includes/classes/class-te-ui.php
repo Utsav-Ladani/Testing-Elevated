@@ -89,7 +89,7 @@ class TE_UI {
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'te_nonce' ),
-				'enabled'  => TE_DB::get_instance()->is_enabled(),
+				'enabled'  => TE::get_instance()->is_enabled(),
 			)
 		);
 	}

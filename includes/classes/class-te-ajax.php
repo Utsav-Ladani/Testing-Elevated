@@ -66,9 +66,9 @@ class TE_AJAX {
 	 * @return void
 	 */
 	public function commit_changes() : void {
-		TE_DB::get_instance()->fire_old_queries();
-		TE_DB::get_instance()->commit();
-		TE_DB::get_instance()->cleanup();
+		TE::get_instance()->fire_old_queries();
+		TE::get_instance()->commit();
+		TE::get_instance()->cleanup();
 
 		wp_send_json_success( 'Changes made during testing are committed.' );
 	}
@@ -79,7 +79,7 @@ class TE_AJAX {
 	 * @return void
 	 */
 	public function rollback_changes() : void {
-		TE_DB::get_instance()->rollback();
+		TE::get_instance()->rollback();
 
 		wp_send_json_success( 'Changes made during testing are rolled back.' );
 	}

@@ -9,10 +9,10 @@
 
 namespace Testing_Elevated\Includes\Helpers;
 
-use Testing_Elevated\Includes\Traits\Singleton;
+use Testing_Elevated\Includes\Traits\TE_Singleton;
 
-require_once __DIR__ . '/autoloader.config.php';
-require_once PLUGIN_DIR . 'includes/traits/trait-singleton.php';
+require_once __DIR__ . '/autoloader-config.php';
+require_once TE_PLUGIN_DIR . 'includes/traits/trait-te-singleton.php';
 
 // Bailout, if exists.
 if ( class_exists( 'Testing_Elevated\Includes\Helpers\TE_Autoloader' ) ) {
@@ -30,22 +30,22 @@ final class TE_Autoloader {
 	/**
 	 * Use Singleton trait.
 	 */
-	use Singleton;
+	use TE_Singleton;
 
 	/**
 	 * Plugin namespace.
 	 * It is used to check whether the resource belongs to the plugin or not.
 	 *
-	 * @const string PLUGIN_NAMESPACE Plugin namespace.
+	 * @const string TE_PLUGIN_NAMESPACE Plugin namespace.
 	 */
-	const PLUGIN_NAMESPACE = PLUGIN_NAMESPACE ?? 'Plugin_Namespace';
+	const TE_PLUGIN_NAMESPACE = TE_PLUGIN_NAMESPACE ?? 'Plugin_Namespace';
 
 	/**
 	 * Plugin directory path.
 	 *
-	 * @const string PLUGIN_DIR Plugin directory path.
+	 * @const string TE_PLUGIN_DIR Plugin directory path.
 	 */
-	const PLUGIN_DIR = PLUGIN_DIR ?? WP_CONTENT_DIR . '/plugins/';
+	const TE_PLUGIN_DIR = TE_PLUGIN_DIR ?? WP_CONTENT_DIR . '/plugins/';
 
 	/**
 	 * Possible resource types.
@@ -74,7 +74,7 @@ final class TE_Autoloader {
 	 * @param string $resource_path Resource Path to load.
 	 * @return void
 	 */
-	private function loader( string $resource_path ) : void {
+	private function loader( string $resource_path ): void {
 		// trim the leading backslash.
 		$resource_path = ltrim( $resource_path, '\\' );
 
@@ -100,7 +100,6 @@ final class TE_Autoloader {
 		if ( file_exists( $resource_filepath ) ) {
 			require_once $resource_filepath;
 		}
-
 	}
 
 	/**
@@ -109,12 +108,12 @@ final class TE_Autoloader {
 	 * @param string $resource_path resource path used with 'use' keyword.
 	 * @return bool
 	 */
-	private static function check_and_remove_main_namespace( string &$resource_path ) : bool {
+	private static function check_and_remove_main_namespace( string &$resource_path ): bool {
 		// separate the path.
 		$resource_path_arr = explode( '\\', $resource_path );
 
 		// disable autoload for the resource which is not from this plugin.
-		if ( count( $resource_path_arr ) === 0 || self::PLUGIN_NAMESPACE !== $resource_path_arr[0] ) {
+		if ( count( $resource_path_arr ) === 0 || self::TE_PLUGIN_NAMESPACE !== $resource_path_arr[0] ) {
 			return false;
 		}
 
@@ -133,7 +132,7 @@ final class TE_Autoloader {
 	 * @param string $resource_path resource path used with 'use' keyword.
 	 * @return string
 	 */
-	private static function remove_resource_name( string $resource_path ) : string {
+	private static function remove_resource_name( string $resource_path ): string {
 		// Get the last position of the backslash in resource path.
 		$last_backslash_position = strrpos( $resource_path, '\\' );
 
@@ -154,17 +153,17 @@ final class TE_Autoloader {
 	 * @param string $resource_path_without_resource_name resource path used with 'use' keyword.
 	 * @return string
 	 */
-	private static function get_parent_dir_path( string $resource_path_without_resource_name ) : string {
+	private static function get_parent_dir_path( string $resource_path_without_resource_name ): string {
 		// replace the backslash with the directory separator.
 		$path = str_replace( '_', '-', $resource_path_without_resource_name );
 		$path = strtolower( $path );
 
 		// don't append the DIRECTORY_SEPARATOR if the path is empty.
 		if ( '' === $path ) {
-			return self::PLUGIN_DIR;
+			return self::TE_PLUGIN_DIR;
 		}
 
-		$path = self::PLUGIN_DIR . $path;
+		$path = self::TE_PLUGIN_DIR . $path;
 		return str_replace(
 			'\\',
 			DIRECTORY_SEPARATOR,
@@ -178,7 +177,7 @@ final class TE_Autoloader {
 	 * @param string $resource_path resource path used with 'use' keyword.
 	 * @return string
 	 */
-	private static function get_resource_name( string $resource_path ) : string {
+	private static function get_resource_name( string $resource_path ): string {
 		// get the last position of the backslash in resource path.
 		$last_backslash_position = strrpos( $resource_path, '\\' );
 
@@ -201,7 +200,7 @@ final class TE_Autoloader {
 	 *
 	 * @return string
 	 */
-	private static function resource_name_to_filename( string $resource_name, string $resource_path_without_resource_name ) : string {
+	private static function resource_name_to_filename( string $resource_name, string $resource_path_without_resource_name ): string {
 		$filename = str_replace( '_', '-', $resource_name );
 		$filename = strtolower( $filename );
 

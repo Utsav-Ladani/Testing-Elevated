@@ -8,8 +8,6 @@
 
 namespace Testing_Elevated\Includes\Classes;
 
-use Testing_Elevated\Includes\Traits\Singleton;
-
 /**
  * Class TE_DB
  * Custom database class extends wpdb.
@@ -57,12 +55,17 @@ class TE_DB extends \wpdb {
 	 * @return array
 	 */
 	private function get_te_query( string $query ): array {
+		global $table_prefix;
+
 		if ( str_starts_with( $query, 'INSERT' ) ) {
 
 			$table_name = explode( ' ', $query )[2];
 			$table_name = str_replace( '`', '', $table_name );
 			$table_name = str_replace( '\'', '', $table_name );
 			$table_name = str_replace( '"', '', $table_name );
+
+			// remove table prefix.
+			$table_name = str_replace( $table_prefix, '', $table_name );
 
 			return array(
 				'query' => $query,
@@ -99,4 +102,3 @@ class TE_DB extends \wpdb {
 		);
 	}
 }
-

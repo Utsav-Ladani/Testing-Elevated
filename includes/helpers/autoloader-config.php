@@ -1,6 +1,6 @@
 <?php
 /**
- * Testing Elevated plugin config
+ * Plugin autoloader config
  * Declare all constants here.
  *
  * @package testing-elevated
@@ -9,7 +9,8 @@
 namespace Testing_Elevated;
 
 /**
- * Define constants below.
+ * Define constants below for specific plugin.
+ * Edit this file as per the plugin.
  */
 
 /**
@@ -27,14 +28,5 @@ if ( ! defined( 'TE_PLUGIN_NAMESPACE' ) ) {
  * @const string TE_PLUGIN_DIR Plugin directory path.
  */
 if ( ! defined( 'TE_PLUGIN_DIR' ) ) {
-	define( 'TE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-}
-
-/**
- * Plugin directory URL.
- *
- * @const string TE_PLUGIN_URL Plugin directory URL.
- */
-if ( ! defined( 'TE_PLUGIN_URL' ) ) {
-	define( 'TE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+	define( 'TE_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins/testing-elevated/' );
 }

@@ -8,7 +8,7 @@
 
 namespace Testing_Elevated\Includes\Classes;
 
-use Testing_Elevated\Includes\Traits\Singleton;
+use Testing_Elevated\Includes\Traits\TE_Singleton;
 
 /**
  * Class TE_Query
@@ -18,7 +18,7 @@ class TE_Query {
 	/**
 	 * Use Singleton trait.
 	 */
-	use Singleton;
+	use TE_Singleton;
 
 	/**
 	 * File relative path.
@@ -33,7 +33,7 @@ class TE_Query {
 	 *
 	 * @return array
 	 */
-	public function get() : array {
+	public function get(): array {
 		$json_encoded_data = TE_File::get_instance()->read( self::FILE_RELATIVE_PATH );
 
 		$data = json_decode( $json_encoded_data, true );
@@ -48,7 +48,7 @@ class TE_Query {
 	 *
 	 * @return void
 	 */
-	public function save( array $queries ) : void {
+	public function save( array $queries ): void {
 		$queries = $this->filter( $queries );
 
 		$data = array(
@@ -67,7 +67,7 @@ class TE_Query {
 	 *
 	 * @return void
 	 */
-	public function delete() : void {
+	public function delete(): void {
 		TE_File::get_instance()->delete( self::FILE_RELATIVE_PATH );
 	}
 
@@ -78,10 +78,10 @@ class TE_Query {
 	 *
 	 * @return array
 	 */
-	public function filter( array $queries ) : array {
+	public function filter( array $queries ): array {
 		return array_filter(
 			$queries,
-			function( $query ) {
+			function ( $query ) {
 				// Allow only INSERT, UPDATE and DELETE queries.
 				return in_array( $query['type'], array( 'insert', 'update', 'delete' ), true );
 			}

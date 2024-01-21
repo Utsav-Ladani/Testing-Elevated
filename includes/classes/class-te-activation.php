@@ -8,7 +8,7 @@
 
 namespace Testing_Elevated\Includes\Classes;
 
-use Testing_Elevated\Includes\Traits\Singleton;
+use Testing_Elevated\Includes\Traits\TE_Singleton;
 
 /**
  * Class TE_Activation
@@ -18,7 +18,7 @@ class TE_Activation {
 	/**
 	 * Use Singleton trait.
 	 */
-	use Singleton;
+	use TE_Singleton;
 
 	/**
 	 * Plugin activation function.
@@ -26,7 +26,7 @@ class TE_Activation {
 	 *
 	 * @return void
 	 */
-	public function activate() : void {
+	public function activate(): void {
 		TE_File::get_instance()->copy( '/plugins/testing-elevated/wp-content/db.php', '/db.php' );
 	}
 
@@ -36,7 +36,7 @@ class TE_Activation {
 	 *
 	 * @return void
 	 */
-	public function deactivate() : void {
+	public function deactivate(): void {
 		TE_File::get_instance()->delete( '/db.php' );
 	}
 }

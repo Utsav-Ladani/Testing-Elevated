@@ -8,7 +8,7 @@
 
 namespace Testing_Elevated\Includes\Classes;
 
-use Testing_Elevated\Includes\Traits\Singleton;
+use Testing_Elevated\Includes\Traits\TE_Singleton;
 
 /**
  * Class TE_AJAX
@@ -18,7 +18,18 @@ class TE_AJAX {
 	/**
 	 * Use Singleton trait.
 	 */
-	use Singleton;
+	use TE_Singleton;
+
+	/**
+	 * Valid ajax actions.
+	 *
+	 * @var string[] Valid ajax actions.
+	 */
+	private array $valid_actions = array(
+		'te_start',
+		'te_commit',
+		'te_rollback',
+	);
 
 	/**
 	 * TE_AJAX constructor.
@@ -26,16 +37,16 @@ class TE_AJAX {
 	 */
 	public function __construct() {
 		// Start testing.
-		add_action( 'wp_ajax_te_start_testing', array( $this, 'start_testing' ) );
-		add_action( 'wp_ajax_nopriv_te_start_testing', array( $this, 'start_testing' ) );
+		add_action( 'wp_ajax_te_start', array( $this, 'start_testing' ) );
+		add_action( 'wp_ajax_nopriv_te_start', array( $this, 'start_testing' ) );
 
 		// Commit changes made during testing.
-		add_action( 'wp_ajax_te_commit_changes', array( $this, 'commit_changes' ) );
-		add_action( 'wp_ajax_nopriv_te_commit_changes', array( $this, 'commit_changes' ) );
+		add_action( 'wp_ajax_te_commit', array( $this, 'commit_changes' ) );
+		add_action( 'wp_ajax_nopriv_te_commit', array( $this, 'commit_changes' ) );
 
 		// Rollback changes made during testing.
-		add_action( 'wp_ajax_te_rollback_changes', array( $this, 'rollback_changes' ) );
-		add_action( 'wp_ajax_nopriv_te_rollback_changes', array( $this, 'rollback_changes' ) );
+		add_action( 'wp_ajax_te_rollback', array( $this, 'rollback_changes' ) );
+		add_action( 'wp_ajax_nopriv_te_rollback', array( $this, 'rollback_changes' ) );
 	}
 
 	/**
@@ -43,10 +54,13 @@ class TE_AJAX {
 	 *
 	 * @return bool
 	 */
-	public function is_te_ajax_request() : bool {
-		return defined( 'DOING_AJAX' ) &&
-			isset( $_REQUEST['action'] ) && // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			str_starts_with( $_REQUEST['action'], 'te_' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	public function is_te_ajax_request(): bool {
+		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
+			return false;
+		}
+
+		// custom sanitization and validation.
+		return in_array( $_REQUEST['action'], $this->valid_actions, true ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
 	/**
@@ -54,7 +68,9 @@ class TE_AJAX {
 	 *
 	 * @return void
 	 */
-	public function start_testing() : void {
+	public function start_testing(): void {
+		$this->nonce_check();
+
 		update_option( 'TE_Status', true );
 
 		wp_send_json_success( 'You can now start testing.' );
@@ -65,7 +81,9 @@ class TE_AJAX {
 	 *
 	 * @return void
 	 */
-	public function commit_changes() : void {
+	public function commit_changes(): void {
+		$this->nonce_check();
+
 		TE::get_instance()->fire_old_queries();
 		TE::get_instance()->commit();
 		TE::get_instance()->cleanup();
@@ -78,11 +96,22 @@ class TE_AJAX {
 	 *
 	 * @return void
 	 */
-	public function rollback_changes() : void {
+	public function rollback_changes(): void {
+		$this->nonce_check();
+
 		TE::get_instance()->rollback();
 
 		wp_send_json_success( 'Changes made during testing are rolled back.' );
 	}
+
+	/**
+	 * Check if the nonce is valid.
+	 *
+	 * @return void
+	 */
+	public function nonce_check(): void {
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'te_nonce' ) ) {
+			wp_send_json_error( 'Invalid nonce.' );
+		}
+	}
 }
-
-

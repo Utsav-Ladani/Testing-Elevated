@@ -12,7 +12,7 @@ namespace Testing_Elevated\Includes\Traits;
  * TE_Singleton trait.
  * It is a singleton trait. It is used to make any class singleton.
  */
-trait Singleton {
+trait TE_Singleton {
 
 	/**
 	 * Protected class constructor to prevent direct object creation
@@ -27,7 +27,7 @@ trait Singleton {
 	 *
 	 * @return object Singleton instance of the class.
 	 */
-	final public static function get_instance() : object {
+	final public static function get_instance(): object {
 
 		/**
 		 * Instance of the class.
@@ -42,6 +42,5 @@ trait Singleton {
 		}
 
 		return $instance;
-
 	}
 }

@@ -8,7 +8,7 @@
 
 namespace Testing_Elevated\Includes\Classes;
 
-use Testing_Elevated\Includes\Traits\Singleton;
+use Testing_Elevated\Includes\Traits\TE_Singleton;
 
 /**
  * Class TE
@@ -19,7 +19,7 @@ class TE {
 	/**
 	 * Use Singleton trait.
 	 */
-	use Singleton;
+	use TE_Singleton;
 
 	/**
 	 * TE constructor.
@@ -48,7 +48,7 @@ class TE {
 	 *
 	 * @return void
 	 */
-	public function init_db() : void {
+	public function init_db(): void {
 		global $wpdb;
 
 		$db_user     = defined( 'DB_USER' ) ? DB_USER : '';
@@ -64,10 +64,12 @@ class TE {
 	 *
 	 * @return bool
 	 */
-	public function is_enabled() : bool {
-		global $wpdb;
+	public function is_enabled(): bool {
+		global $wpdb, $table_prefix;
 
-		return '1' === $wpdb->get_var( "SELECT option_value FROM wp_options WHERE option_name = 'TE_Status'" );
+		$table_name = $table_prefix . 'options';
+
+		return '1' === $wpdb->get_var( "SELECT option_value FROM {$table_name} WHERE option_name = 'TE_Status'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	/**
@@ -76,7 +78,7 @@ class TE {
 	 *
 	 * @return void
 	 */
-	public function start() : void {
+	public function start(): void {
 		global $wpdb;
 
 		$wpdb->query( 'SET autocommit = 0' );
@@ -86,7 +88,7 @@ class TE {
 	 * Commit testing.
 	 * It commits all the queries.
 	 */
-	public function commit() : void {
+	public function commit(): void {
 		global $wpdb;
 
 		$wpdb->query( 'COMMIT' );
@@ -99,7 +101,7 @@ class TE {
 	 *
 	 * @return void
 	 */
-	public function rollback() : void {
+	public function rollback(): void {
 		// delete all the queries so next time they don't execute.
 		TE_Query::get_instance()->delete();
 	}
@@ -110,7 +112,7 @@ class TE {
 	 *
 	 * @return void
 	 */
-	public function end() : void {
+	public function end(): void {
 		register_shutdown_function( array( $this, 'record_queries' ) );
 	}
 
@@ -122,7 +124,7 @@ class TE {
 	 *
 	 * @return void
 	 */
-	public function record_queries() : void {
+	public function record_queries(): void {
 		$queries = TE_DB::$te_queries;
 
 		TE_Query::get_instance()->save( $queries );
@@ -134,8 +136,8 @@ class TE {
 	 *
 	 * @return void
 	 */
-	public function fire_old_queries() : void {
-		global $wpdb;
+	public function fire_old_queries(): void {
+		global $wpdb, $table_prefix;
 
 		$queries = TE_Query::get_instance()->get();
 
@@ -144,9 +146,33 @@ class TE {
 
 			if ( 'insert' === $query['type'] ) {
 				// get the table name from the query.
-				$wpdb->update( $query['table'], array( 'id' => $query['id'] ), array( 'id' => $wpdb->insert_id ) );
+				$primary_key = $this->get_table_primary_key( $table_prefix . $query['table'] );
+				$wpdb->update(
+					$table_prefix . $query['table'],
+					array(
+						$primary_key => $query['id'],
+					),
+					array(
+						$primary_key => $wpdb->insert_id,
+					)
+				);
 			}
 		}
+	}
+
+	/**
+	 * Get the table primary key.
+	 *
+	 * @param string $table_name Table name.
+	 *
+	 * @return string
+	 */
+	public function get_table_primary_key( string $table_name ): string {
+		global $wpdb;
+
+		$res = $wpdb->get_var( "SHOW KEYS FROM $table_name WHERE Key_name = 'PRIMARY'", 4 ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return $res ? $res : 'id';
 	}
 
 	/**
@@ -154,14 +180,14 @@ class TE {
 	 *
 	 * @return void
 	 */
-	public function cleanup() : void {
+	public function cleanup(): void {
 		global $wpdb;
 
 		// delete all the queries.
 		TE_Query::get_instance()->delete();
 
-		// delete all the options.
-		$wpdb->query( "DELETE FROM wp_options WHERE option_name LIKE 'TE_Status'" );
+		$table_name = $wpdb->prefix . 'options';
+
+		$wpdb->delete( $table_name, array( 'option_name' => 'TE_Status' ) );
 	}
 }
-

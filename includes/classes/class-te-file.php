@@ -8,7 +8,7 @@
 
 namespace Testing_Elevated\Includes\Classes;
 
-use Testing_Elevated\Includes\Traits\Singleton;
+use Testing_Elevated\Includes\Traits\TE_Singleton;
 
 /**
  * Class TE_File
@@ -18,7 +18,7 @@ class TE_File {
 	/**
 	 * Use Singleton trait.
 	 */
-	use Singleton;
+	use TE_Singleton;
 
 	/**
 	 * Read the file.
@@ -27,7 +27,7 @@ class TE_File {
 	 *
 	 * @return string
 	 */
-	public function read( string $relative_path ) : string {
+	public function read( string $relative_path ): string {
 		$absolute_path = $this->get_absolute_path( $relative_path );
 
 		if ( ! file_exists( $absolute_path ) ) {
@@ -45,10 +45,10 @@ class TE_File {
 	 *
 	 * @return void
 	 */
-	public function write( string $relative_path, string $content ) : void {
+	public function write( string $relative_path, string $content ): void {
 		$absolute_path = $this->get_absolute_path( $relative_path );
 
-		file_put_contents( $absolute_path, $content );  // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+		file_put_contents( $absolute_path, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 	}
 
 	/**
@@ -58,10 +58,14 @@ class TE_File {
 	 *
 	 * @return void
 	 */
-	public function delete( string $relative_path ) : void {
+	public function delete( string $relative_path ): void {
 		$absolute_path = $this->get_absolute_path( $relative_path );
 
-		unlink( $absolute_path );
+		if ( ! file_exists( $absolute_path ) ) {
+			return;
+		}
+
+		wp_delete_file( $absolute_path );
 	}
 
 	/**
@@ -72,7 +76,7 @@ class TE_File {
 	 *
 	 * @return void
 	 */
-	public function copy( string $old_relative_path, string $new_relative_path ) : void {
+	public function copy( string $old_relative_path, string $new_relative_path ): void {
 		$old_absolute_path = $this->get_absolute_path( $old_relative_path );
 		$new_absolute_path = $this->get_absolute_path( $new_relative_path );
 
@@ -86,7 +90,7 @@ class TE_File {
 	 *
 	 * @return string
 	 */
-	public function get_absolute_path( string $relative_path ) : string {
+	public function get_absolute_path( string $relative_path ): string {
 		return WP_CONTENT_DIR . $relative_path;
 	}
 }

@@ -8,7 +8,7 @@
 
 namespace Testing_Elevated\Includes\Classes;
 
-use Testing_Elevated\Includes\Traits\Singleton;
+use Testing_Elevated\Includes\Traits\TE_Singleton;
 
 require_once WP_CONTENT_DIR . '/plugins/testing-elevated/plugin-config.php';
 
@@ -20,7 +20,7 @@ class TE_UI {
 	/**
 	 * Use Singleton trait.
 	 */
-	use Singleton;
+	use TE_Singleton;
 
 	/**
 	 * Initialize the class.
@@ -34,7 +34,7 @@ class TE_UI {
 	 *
 	 * @return void
 	 */
-	public function add_menu() : void {
+	public function add_menu(): void {
 		add_action( 'wp_head', array( $this, 'render_menu' ) );
 		add_action( 'admin_head', array( $this, 'render_menu' ) );
 
@@ -47,16 +47,16 @@ class TE_UI {
 	 *
 	 * @return void
 	 */
-	public function render_menu() : void {
+	public function render_menu(): void {
 		?>
 		<div class="te-menu-wrapper">
 			<div class="te-menu__title">
-				<img class="te-menu__title__image" src="<?php echo esc_url( PLUGIN_URL . 'assets/images/te_logo.png' ); ?>" alt="Testing Elevated">
+				<img class="te-menu__title__image" src="<?php echo esc_url( TE_PLUGIN_URL . 'assets/images/te_logo.png' ); ?>" alt="Testing Elevated">
 			</div>
 			<ul id="te-menu" class="te-menu">
-				<li id="te-start" class="te-menu__item" data-action="te_start_testing">Start</li>
-				<li id="te-commit" class="te-menu__item" data-action="te_commit_changes">Commit</li>
-				<li id="te-rollback" class="te-menu__item" data-action="te_rollback_changes">Rollback</li>
+				<li id="te-start" class="te-menu__item" data-action="te_start">Start</li>
+				<li id="te-commit" class="te-menu__item" data-action="te_commit">Commit</li>
+				<li id="te-rollback" class="te-menu__item" data-action="te_rollback">Rollback</li>
 			</ul>
 		</div>
 		<?php
@@ -67,19 +67,19 @@ class TE_UI {
 	 *
 	 * @return void
 	 */
-	public function enqueue_menu_styles_and_scripts() : void {
+	public function enqueue_menu_styles_and_scripts(): void {
 		wp_enqueue_style(
 			'te-menu-style',
-			PLUGIN_URL . 'assets/css/menu.css',
+			TE_PLUGIN_URL . 'assets/css/menu.css',
 			array(),
-			filemtime( PLUGIN_DIR . 'assets/css/menu.css' )
+			filemtime( TE_PLUGIN_DIR . 'assets/css/menu.css' )
 		);
 
 		wp_enqueue_script(
 			'te-menu-script',
-			PLUGIN_URL . 'assets/js/menu.js',
+			TE_PLUGIN_URL . 'assets/js/menu.js',
 			array(),
-			filemtime( PLUGIN_DIR . 'assets/js/menu.js' ),
+			filemtime( TE_PLUGIN_DIR . 'assets/js/menu.js' ),
 			true
 		);
 

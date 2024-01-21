@@ -14,7 +14,7 @@
 
 namespace Testing_Elevated;
 
-require_once __DIR__ . '/includes/helpers/class-autoloader.php';
+require_once __DIR__ . '/includes/helpers/class-te-autoloader.php';
 
 use Testing_Elevated\Includes\Classes\TE_Activation;
 use Testing_Elevated\Includes\Classes\TE_AJAX;

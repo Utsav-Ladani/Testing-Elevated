@@ -8,7 +8,7 @@
 
 namespace Testing_Elevated;
 
-require_once WP_CONTENT_DIR . '/plugins/testing-elevated/includes/helpers/class-autoloader.php';
+require_once WP_CONTENT_DIR . '/plugins/testing-elevated/includes/helpers/class-te-autoloader.php';
 
 use Testing_Elevated\Includes\Classes\TE;
 

@@ -96,14 +96,21 @@
             xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
             xhr.onload = () => {
                 if ( xhr.status >= 200 && xhr.status < 300 ) {
-                    const response = JSON.parse( xhr.responseText );
-                    if ( response.success ) {
-                        Menu.instance.clearActiveClass();
-                        this.setActive( true );
-                    }
+                   try{
+                       const response = JSON.parse( xhr.responseText );
+                       if ( response.success ) {
+                           Menu.instance.clearActiveClass();
+                           this.setActive( true );
+                       }
+                   } catch (e) {
+                   }
                 }
 
                 Menu.instance.disableMenuButtons( false );
+            }
+
+            xhr.onerror = () => {
+                // Menu.instance.disableMenuButtons( true );
             }
 
             xhr.send( `action=${this.action}&nonce=${nonce}` );

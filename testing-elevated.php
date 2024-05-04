@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Testing Elevated
- * Description: Feel free to test and revert or commit the changes.
+ * Description: Test out various features of your WordPress website effortlessly. Unsure about how your site's UI appears or what specific features do? Simply activate this plugin to make changes, view the results, and decide whether to keep them or revert back.
  * Author:      Utsav Ladani
  * Author URI:  https://profiles.wordpress.org/utsavladani/
  * License:     GPL2

@@ -1,5 +1,5 @@
 <p align="center">
- <img height=200 src="assets/images/te_logo.png" alt="Testing Elevated" />
+ <img height=200 src="assets/images/testing_elevated_logo.png" alt="Testing Elevated" />
 </p>
 
 # Testing Elevated
@@ -23,6 +23,18 @@ Test out various features of your WordPress website effortlessly with this plugi
 <p align="center">
  <img width="100%" src="assets/wpassets/screenshot-1.png" alt="Testing Elevated" />
 </p>
+
+## Frequently Asked Questions
+
+**Does this plugin use file-based storage?** \
+Yes, this plugin uses the `queries.json` file to store the data.
+
+**Does this plugin work with all plugins?** \
+No, this plugin may not work with plugins that are storing/modifying data outside the WordPress or using `db.php` drop-in.
+
+**Does this plugin save/roll back file changes?** \
+No, this plugin only saves/rolls back the database changes.
+
 
 ## Want to contribute?
 

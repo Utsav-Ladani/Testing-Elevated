@@ -5,7 +5,6 @@
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="array">
-                <!-- List of text domains used in your plugin and theme -->
                 <element value="testing-elevated" />
             </property>
         </properties>

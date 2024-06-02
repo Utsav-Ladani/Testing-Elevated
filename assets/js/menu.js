@@ -30,7 +30,7 @@
             this.menuButtonsID = [ 'start', 'commit', 'rollback' ];
             this.menuButtons = this.menuButtonsID.map( buttonId => new MenuButton(buttonId) );
 
-            const { enabled } = te_menu_object;
+            const { enabled } = testing_elevated_menu_object;
 
             if ( enabled ) {
                 this.menuButtons.forEach( button => button.ID === 'start' ? button.setActive(true) : null );
@@ -62,7 +62,7 @@
          */
         constructor(buttonId) {
             this.ID = buttonId;
-            this.button = document.getElementById('te-' + this.ID);
+            this.button = document.getElementById('testing-elevated-' + this.ID);
 
             if( ! this.button ) {
                 return;
@@ -88,7 +88,7 @@
          * Send WP ajax request to the server
          */
         sendWPAjaxRequest() {
-            const { ajax_url, nonce } = te_menu_object;
+            const { ajax_url, nonce } = testing_elevated_menu_object;
 
             // WordPress ajax request
             const xhr = new XMLHttpRequest();
@@ -101,6 +101,9 @@
                        if ( response.success ) {
                            Menu.instance.clearActiveClass();
                            this.setActive( true );
+
+                           // reload the page
+                           location.reload();
                        }
                    } catch (e) {
                    }
@@ -121,9 +124,9 @@
          */
         setActive( active ) {
             if ( active ) {
-                this.button.classList.add( 'te-menu__item--active' );
+                this.button.classList.add( 'testing-elevated-menu__item--active' );
             } else {
-                this.button.classList.remove( 'te-menu__item--active' );
+                this.button.classList.remove( 'testing-elevated-menu__item--active' );
             }
         }
 
@@ -132,7 +135,7 @@
          */
         setDisabled( disabled ) {
             this.disabled = !!disabled;
-            this.button.classList.toggle( 'te-menu__item--disabled', this.disabled );
+            this.button.classList.toggle( 'testing-elevated-menu__item--disabled', this.disabled );
         }
     }
 

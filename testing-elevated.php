@@ -14,18 +14,18 @@
 
 namespace Testing_Elevated;
 
-require_once __DIR__ . '/includes/helpers/class-te-autoloader.php';
+require_once __DIR__ . '/includes/helpers/class-testing-elevated-autoloader.php';
 
-use Testing_Elevated\Includes\Classes\TE_Activation;
-use Testing_Elevated\Includes\Classes\TE_AJAX;
-use Testing_Elevated\Includes\Classes\TE_UI;
+use Testing_Elevated\Includes\Classes\Testing_Elevated_Activation;
+use Testing_Elevated\Includes\Classes\Testing_Elevated_AJAX;
+use Testing_Elevated\Includes\Classes\Testing_Elevated_UI;
 
 // Register activation hook.
-register_activation_hook( __FILE__, array( TE_Activation::get_instance(), 'activate' ) );
+register_activation_hook( __FILE__, array( Testing_Elevated_Activation::get_instance(), 'activate' ) );
 
 // Register deactivation hook.
-register_deactivation_hook( __FILE__, array( TE_Activation::get_instance(), 'deactivate' ) );
+register_deactivation_hook( __FILE__, array( Testing_Elevated_Activation::get_instance(), 'deactivate' ) );
 
 // Register AJAX hooks.
-TE_AJAX::get_instance();
-TE_UI::get_instance();
+Testing_Elevated_AJAX::get_instance();
+Testing_Elevated_UI::get_instance();

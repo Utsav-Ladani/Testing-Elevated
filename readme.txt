@@ -3,7 +3,7 @@ Contributors: utsavladani
 Donate link: https://github.com/Utsav-Ladani/Testing-Elevated
 Tags: testing, testing elevated, database, commit, rollback
 Requires at least: 5.0
-Tested up to: 6.3
+Tested up to: 6.5
 Stable tag: 1.0.0
 Requires PHP: 7.4
 License: GPLv2 or later
@@ -45,6 +45,22 @@ If you have any queries or need help, feel free to ask us on [Testing Elevated](
 == Screenshots ==
 
 1. Testing Elevated plugin sidebar menu.
+
+
+== Frequently Asked Questions ==
+
+= Does this plugin use file-based storage? =
+
+Yes, this plugin uses the `queries.json` file to store the data.
+
+= Does this plugin work with all plugins? =
+
+No, this plugin may not work with plugins that are storing/modifying data outside the WordPress or using `db.php` drop-in.
+
+= Does this plugin save/roll back file changes? =
+
+No, this plugin only saves/rolls back the database changes.
+
 
 == Changelog ==
 

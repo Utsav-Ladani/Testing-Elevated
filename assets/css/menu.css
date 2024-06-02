@@ -2,15 +2,15 @@
  * Style for the right menu of Testing Elevated plugin
  */
 :root {
-  --te-menu-color: dodgerblue;
-  --te-menu-color-dark: #000;
-  --te-menu-color-secondary: #fff;
-  --te-menu-bg-color: #000;
-  --te-menu-bg-color-secondary: dodgerblue;
-  --te-menu-bg-color-secondary-lighter: #d7edff;
+  --testing-elevated-menu-color: dodgerblue;
+  --testing-elevated-menu-color-dark: #000;
+  --testing-elevated-menu-color-secondary: #fff;
+  --testing-elevated-menu-bg-color: #000;
+  --testing-elevated-menu-bg-color-secondary: dodgerblue;
+  --testing-elevated-menu-bg-color-secondary-lighter: #d7edff;
 }
 
-.te-menu-wrapper {
+.testing-elevated-menu-wrapper {
   font-size: 20px;
   position: fixed;
   right: 0;
@@ -21,9 +21,9 @@
   z-index: 200;
 }
 
-.te-menu__title {
-  color: var(--te-menu-color);
-  background: var(--te-menu-bg-color);
+.testing-elevated-menu__title {
+  color: var(--testing-elevated-menu-color);
+  background: var(--testing-elevated-menu-bg-color);
   padding: 0.6em 1.6em 0.6em 0.6em;
   border-bottom-left-radius: 0.3em;
   border-top-left-radius: 0.3em;
@@ -33,20 +33,20 @@
   line-height: 0;
 }
 
-.te-menu-wrapper:hover .te-menu__title {
-  color: var(--te-menu-color-dark);
-  background: var(--te-menu-bg-color-secondary-lighter);
+.testing-elevated-menu-wrapper:hover .testing-elevated-menu__title {
+  color: var(--testing-elevated-menu-color-dark);
+  background: var(--testing-elevated-menu-bg-color-secondary-lighter);
 }
 
-.te-menu__title__image {
+.testing-elevated-menu__title__image {
   width: auto;
   height: 2em;
   object-fit: cover;
 }
 
-.te-menu {
-  color: var(--te-menu-color);
-  background: var(--te-menu-bg-color);
+.testing-elevated-menu {
+  color: var(--testing-elevated-menu-color);
+  background: var(--testing-elevated-menu-bg-color);
   padding: 0;
   margin: 0;
   display: flex;
@@ -57,14 +57,14 @@
   transform: translateX(110%);
 }
 
-.te-menu-wrapper:hover > .te-menu {
+.testing-elevated-menu-wrapper:hover > .testing-elevated-menu {
   transform: translateX(0);
   max-width: 14em;
   margin-right: 0.6em;
   box-shadow: 0 0 1em rgba(0, 0, 0, 0.6);
 }
 
-.te-menu__item {
+.testing-elevated-menu__item {
   list-style: none;
   padding: 0.6em;
   cursor: pointer;
@@ -73,19 +73,19 @@
   line-height: 1.4em;
 }
 
-.te-menu__item:hover {
-  color: var(--te-menu-color-dark);
-  background: var(--te-menu-bg-color-secondary-lighter);
+.testing-elevated-menu__item:hover {
+  color: var(--testing-elevated-menu-color-dark);
+  background: var(--testing-elevated-menu-bg-color-secondary-lighter);
 }
 
-.te-menu__item--active {
-  color: var(--te-menu-color-secondary);
-  background: var(--te-menu-bg-color-secondary);
+.testing-elevated-menu__item--active {
+  color: var(--testing-elevated-menu-color-secondary);
+  background: var(--testing-elevated-menu-bg-color-secondary);
   cursor: not-allowed;
   pointer-events: none;
 }
 
-.te-menu__item--disabled {
+.testing-elevated-menu__item--disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;

@@ -9,10 +9,10 @@
 namespace Testing_Elevated\Includes\Traits;
 
 /**
- * TE_Singleton trait.
+ * Testing_Elevated_Singleton trait.
  * It is a singleton trait. It is used to make any class singleton.
  */
-trait TE_Singleton {
+trait Testing_Elevated_Singleton {
 
 	/**
 	 * Protected class constructor to prevent direct object creation

@@ -9,43 +9,43 @@
 
 namespace Testing_Elevated\Includes\Helpers;
 
-use Testing_Elevated\Includes\Traits\TE_Singleton;
+use Testing_Elevated\Includes\Traits\Testing_Elevated_Singleton;
 
 require_once __DIR__ . '/autoloader-config.php';
-require_once TE_PLUGIN_DIR . 'includes/traits/trait-te-singleton.php';
+require_once TESTING_ELEVATED_PLUGIN_DIR . 'includes/traits/trait-testing-elevated-singleton.php';
 
 // Bailout, if exists.
-if ( class_exists( 'Testing_Elevated\Includes\Helpers\TE_Autoloader' ) ) {
+if ( class_exists( 'Testing_Elevated\Includes\Helpers\Testing_Elevated_Autoloader' ) ) {
 	return;
 }
 
 /**
- * TE_Autoloader class.
+ * Class Testing_Elevated_Autoloader
  * It loads the resources like class, trait, etc. automatically when needed.
  * We don't need to require or include the files manually.
  * It is a singleton class.
  * It works only for the classes which are in the namespace defined autoloader.config.php file.
  */
-final class TE_Autoloader {
+final class Testing_Elevated_Autoloader {
 	/**
 	 * Use Singleton trait.
 	 */
-	use TE_Singleton;
+	use Testing_Elevated_Singleton;
 
 	/**
 	 * Plugin namespace.
 	 * It is used to check whether the resource belongs to the plugin or not.
 	 *
-	 * @const string TE_PLUGIN_NAMESPACE Plugin namespace.
+	 * @const string TESTING_ELEVATED_PLUGIN_NAMESPACE Plugin namespace.
 	 */
-	const TE_PLUGIN_NAMESPACE = TE_PLUGIN_NAMESPACE ?? 'Plugin_Namespace';
+	const TESTING_ELEVATED_PLUGIN_NAMESPACE = TESTING_ELEVATED_PLUGIN_NAMESPACE ?? 'Plugin_Namespace';
 
 	/**
 	 * Plugin directory path.
 	 *
-	 * @const string TE_PLUGIN_DIR Plugin directory path.
+	 * @const string TESTING_ELEVATED_PLUGIN_DIR Plugin directory path.
 	 */
-	const TE_PLUGIN_DIR = TE_PLUGIN_DIR ?? WP_CONTENT_DIR . '/plugins/';
+	const TESTING_ELEVATED_PLUGIN_DIR = TESTING_ELEVATED_PLUGIN_DIR ?? WP_CONTENT_DIR . '/plugins/';
 
 	/**
 	 * Possible resource types.
@@ -113,7 +113,7 @@ final class TE_Autoloader {
 		$resource_path_arr = explode( '\\', $resource_path );
 
 		// disable autoload for the resource which is not from this plugin.
-		if ( count( $resource_path_arr ) === 0 || self::TE_PLUGIN_NAMESPACE !== $resource_path_arr[0] ) {
+		if ( count( $resource_path_arr ) === 0 || self::TESTING_ELEVATED_PLUGIN_NAMESPACE !== $resource_path_arr[0] ) {
 			return false;
 		}
 
@@ -160,10 +160,10 @@ final class TE_Autoloader {
 
 		// don't append the DIRECTORY_SEPARATOR if the path is empty.
 		if ( '' === $path ) {
-			return self::TE_PLUGIN_DIR;
+			return self::TESTING_ELEVATED_PLUGIN_DIR;
 		}
 
-		$path = self::TE_PLUGIN_DIR . $path;
+		$path = self::TESTING_ELEVATED_PLUGIN_DIR . $path;
 		return str_replace(
 			'\\',
 			DIRECTORY_SEPARATOR,
@@ -223,4 +223,4 @@ final class TE_Autoloader {
 	}
 }
 
-TE_Autoloader::get_instance();
+Testing_Elevated_Autoloader::get_instance();

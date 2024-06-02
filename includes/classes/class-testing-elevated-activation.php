@@ -8,17 +8,17 @@
 
 namespace Testing_Elevated\Includes\Classes;
 
-use Testing_Elevated\Includes\Traits\TE_Singleton;
+use Testing_Elevated\Includes\Traits\Testing_Elevated_Singleton;
 
 /**
- * Class TE_Activation
+ * Class Testing_Elevated_Activation
  * It handles all the activation and deactivation related operations.
  */
-class TE_Activation {
+class Testing_Elevated_Activation {
 	/**
 	 * Use Singleton trait.
 	 */
-	use TE_Singleton;
+	use Testing_Elevated_Singleton;
 
 	/**
 	 * Plugin activation function.
@@ -27,7 +27,8 @@ class TE_Activation {
 	 * @return void
 	 */
 	public function activate(): void {
-		TE_File::get_instance()->copy( '/plugins/testing-elevated/wp-content/db.php', '/db.php' );
+		Testing_Elevated_Query::get_instance()->delete();
+		Testing_Elevated_File::get_instance()->copy( '/plugins/testing-elevated/wp-content/db.php', '/db.php' );
 	}
 
 	/**
@@ -37,6 +38,10 @@ class TE_Activation {
 	 * @return void
 	 */
 	public function deactivate(): void {
-		TE_File::get_instance()->delete( '/db.php' );
+		// remove callback added by register_shutdown_function
+		Testing_Elevated::get_instance()->commit();
+		Testing_Elevated::get_instance()->cleanup();
+		Testing_Elevated_Query::get_instance()->delete();
+		Testing_Elevated_File::get_instance()->delete( '/db.php' );
 	}
 }

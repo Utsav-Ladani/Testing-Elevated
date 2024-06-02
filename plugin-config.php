@@ -15,26 +15,26 @@ namespace Testing_Elevated;
 /**
  * Plugin namespace.
  *
- * @const string TE_PLUGIN_NAMESPACE Plugin namespace.
+ * @const string TESTING_ELEVATED_PLUGIN_NAMESPACE Plugin namespace.
  */
-if ( ! defined( 'TE_PLUGIN_NAMESPACE' ) ) {
-	define( 'TE_PLUGIN_NAMESPACE', 'Testing_Elevated' );
+if ( ! defined( 'TESTING_ELEVATED_PLUGIN_NAMESPACE' ) ) {
+	define( 'TESTING_ELEVATED_PLUGIN_NAMESPACE', 'Testing_Elevated' );
 }
 
 /**
  * Plugin directory path.
  *
- * @const string TE_PLUGIN_DIR Plugin directory path.
+ * @const string TESTING_ELEVATED_PLUGIN_DIR Plugin directory path.
  */
-if ( ! defined( 'TE_PLUGIN_DIR' ) ) {
-	define( 'TE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+if ( ! defined( 'TESTING_ELEVATED_PLUGIN_DIR' ) ) {
+	define( 'TESTING_ELEVATED_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 }
 
 /**
  * Plugin directory URL.
  *
- * @const string TE_PLUGIN_URL Plugin directory URL.
+ * @const string TESTING_ELEVATED_PLUGIN_URL Plugin directory URL.
  */
-if ( ! defined( 'TE_PLUGIN_URL' ) ) {
-	define( 'TE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+if ( ! defined( 'TESTING_ELEVATED_PLUGIN_URL' ) ) {
+	define( 'TESTING_ELEVATED_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }

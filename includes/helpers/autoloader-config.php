@@ -16,17 +16,17 @@ namespace Testing_Elevated;
 /**
  * Plugin namespace.
  *
- * @const string TE_PLUGIN_NAMESPACE Plugin namespace.
+ * @const string TESTING_ELEVATED_PLUGIN_NAMESPACE Plugin namespace.
  */
-if ( ! defined( 'TE_PLUGIN_NAMESPACE' ) ) {
-	define( 'TE_PLUGIN_NAMESPACE', 'Testing_Elevated' );
+if ( ! defined( 'TESTING_ELEVATED_PLUGIN_NAMESPACE' ) ) {
+	define( 'TESTING_ELEVATED_PLUGIN_NAMESPACE', 'Testing_Elevated' );
 }
 
 /**
  * Plugin directory path.
  *
- * @const string TE_PLUGIN_DIR Plugin directory path.
+ * @const string TESTING_ELEVATED_PLUGIN_DIR Plugin directory path.
  */
-if ( ! defined( 'TE_PLUGIN_DIR' ) ) {
-	define( 'TE_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins/testing-elevated/' );
+if ( ! defined( 'TESTING_ELEVATED_PLUGIN_DIR' ) ) {
+	define( 'TESTING_ELEVATED_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins/testing-elevated/' );
 }

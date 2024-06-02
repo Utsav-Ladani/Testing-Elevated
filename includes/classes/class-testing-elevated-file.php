@@ -8,17 +8,17 @@
 
 namespace Testing_Elevated\Includes\Classes;
 
-use Testing_Elevated\Includes\Traits\TE_Singleton;
+use Testing_Elevated\Includes\Traits\Testing_Elevated_Singleton;
 
 /**
- * Class TE_File
+ * Class Testing_Elevated_File
  * It handles all the file related operations.
  */
-class TE_File {
+class Testing_Elevated_File {
 	/**
 	 * Use Singleton trait.
 	 */
-	use TE_Singleton;
+	use Testing_Elevated_Singleton;
 
 	/**
 	 * Read the file.

@@ -9,23 +9,23 @@
 namespace Testing_Elevated\Includes\Classes;
 
 /**
- * Class TE_DB
+ * Class Testing_Elevated_DB
  * Custom database class extends wpdb.
  */
-class TE_DB extends \wpdb {
+class Testing_Elevated_DB extends \wpdb {
 	/**
 	 * Store all the queries.
 	 *
-	 * @var array $te_queries
+	 * @var array $testing_elevated_queries
 	 */
-	public static $te_queries = array();
+	public static $testing_elevated_queries = array();
 
 	/**
 	 * Store current query.
 	 *
-	 * @var array $current_te_query
+	 * @var array $current_testing_elevated_query
 	 */
-	public $current_te_query = array();
+	public $current_testing_elevated_query = array();
 
 	/**
 	 * Override the wpdb query function.
@@ -38,23 +38,23 @@ class TE_DB extends \wpdb {
 		$result = parent::query( $query );
 
 		// If the query is to fix the previous INSERT query, then return the result and don't record.
-		if ( is_array( $this->current_te_query ) && isset( $this->current_te_query->insert_correct_query ) && $this->current_te_query->insert_correct_query ) {
+		if ( is_array( $this->current_testing_elevated_query ) && isset( $this->current_testing_elevated_query->insert_correct_query ) && $this->current_testing_elevated_query->insert_correct_query ) {
 			return $result;
 		}
 
-		self::$te_queries[] = $this->get_te_query( $query );
+		self::$testing_elevated_queries[] = $this->get_testing_elevated_query( $query );
 
 		return $result;
 	}
 
 	/**
-	 * Create the TE query with extra parameters.
+	 * Create the Testing Elevated query with extra parameters.
 	 *
 	 * @param string $query SQL query string.
 	 *
 	 * @return array
 	 */
-	private function get_te_query( string $query ): array {
+	private function get_testing_elevated_query( string $query ): array {
 		global $table_prefix;
 
 		if ( str_starts_with( $query, 'INSERT' ) ) {

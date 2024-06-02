@@ -8,26 +8,26 @@
 
 namespace Testing_Elevated\Includes\Classes;
 
-use Testing_Elevated\Includes\Traits\TE_Singleton;
+use Testing_Elevated\Includes\Traits\Testing_Elevated_Singleton;
 
 /**
- * Class TE
+ * Class Testing_Elevated
  * It is a main class
  * It handles all the database and testing related operations
  */
-class TE {
+class Testing_Elevated {
 	/**
 	 * Use Singleton trait.
 	 */
-	use TE_Singleton;
+	use Testing_Elevated_Singleton;
 
 	/**
-	 * TE constructor.
+	 * Testing_Elevated constructor.
 	 * It is a private constructor to prevent direct object creation.
 	 */
 	private function __construct() {
 		// disable testing environment for self ajax requests.
-		if ( TE_AJAX::get_instance()->is_te_ajax_request() ) {
+		if ( Testing_Elevated_AJAX::get_instance()->is_testing_elevated_ajax_request() ) {
 			return;
 		}
 
@@ -56,7 +56,7 @@ class TE {
 		$db_name     = defined( 'DB_NAME' ) ? DB_NAME : '';
 		$db_host     = defined( 'DB_HOST' ) ? DB_HOST : '';
 
-		$wpdb = new TE_DB( $db_user, $db_password, $db_name, $db_host ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$wpdb = new Testing_Elevated_DB( $db_user, $db_password, $db_name, $db_host ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 	}
 
 	/**
@@ -69,7 +69,7 @@ class TE {
 
 		$table_name = $table_prefix . 'options';
 
-		return '1' === $wpdb->get_var( "SELECT option_value FROM {$table_name} WHERE option_name = 'TE_Status'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return '1' === $wpdb->get_var( "SELECT option_value FROM {$table_name} WHERE option_name = 'Testing_Elevated_Status'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	/**
@@ -103,7 +103,7 @@ class TE {
 	 */
 	public function rollback(): void {
 		// delete all the queries so next time they don't execute.
-		TE_Query::get_instance()->delete();
+		Testing_Elevated_Query::get_instance()->delete();
 	}
 
 	/**
@@ -125,9 +125,9 @@ class TE {
 	 * @return void
 	 */
 	public function record_queries(): void {
-		$queries = TE_DB::$te_queries;
+		$queries = Testing_Elevated_DB::$testing_elevated_queries;
 
-		TE_Query::get_instance()->save( $queries );
+		Testing_Elevated_Query::get_instance()->save( $queries );
 	}
 
 	/**
@@ -139,7 +139,7 @@ class TE {
 	public function fire_old_queries(): void {
 		global $wpdb, $table_prefix;
 
-		$queries = TE_Query::get_instance()->get();
+		$queries = Testing_Elevated_Query::get_instance()->get();
 
 		foreach ( $queries as $query ) {
 			$result = $wpdb->query( $query['query'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -184,10 +184,10 @@ class TE {
 		global $wpdb;
 
 		// delete all the queries.
-		TE_Query::get_instance()->delete();
+		Testing_Elevated_Query::get_instance()->delete();
 
 		$table_name = $wpdb->prefix . 'options';
 
-		$wpdb->delete( $table_name, array( 'option_name' => 'TE_Status' ) );
+		$wpdb->delete( $table_name, array( 'option_name' => 'Testing_Elevated_Status' ) );
 	}
 }

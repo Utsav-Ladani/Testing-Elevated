@@ -8,17 +8,17 @@
 
 namespace Testing_Elevated\Includes\Classes;
 
-use Testing_Elevated\Includes\Traits\TE_Singleton;
+use Testing_Elevated\Includes\Traits\Testing_Elevated_Singleton;
 
 /**
- * Class TE_Query
+ * Class Testing_Elevated_Query
  * It handles all the query related operations.
  */
-class TE_Query {
+class Testing_Elevated_Query {
 	/**
 	 * Use Singleton trait.
 	 */
-	use TE_Singleton;
+	use Testing_Elevated_Singleton;
 
 	/**
 	 * File relative path.
@@ -34,7 +34,7 @@ class TE_Query {
 	 * @return array
 	 */
 	public function get(): array {
-		$json_encoded_data = TE_File::get_instance()->read( self::FILE_RELATIVE_PATH );
+		$json_encoded_data = Testing_Elevated_File::get_instance()->read( self::FILE_RELATIVE_PATH );
 
 		$data = json_decode( $json_encoded_data, true );
 
@@ -54,12 +54,12 @@ class TE_Query {
 		$data = array(
 			'queries' => $queries,
 			'date'    => time(),
-			'version' => '1.0.1',
+			'version' => '1.0.0',
 		);
 
 		$json_encoded_data = wp_json_encode( $data );
 
-		TE_File::get_instance()->write( self::FILE_RELATIVE_PATH, $json_encoded_data );
+		Testing_Elevated_File::get_instance()->write( self::FILE_RELATIVE_PATH, $json_encoded_data );
 	}
 
 	/**
@@ -68,7 +68,7 @@ class TE_Query {
 	 * @return void
 	 */
 	public function delete(): void {
-		TE_File::get_instance()->delete( self::FILE_RELATIVE_PATH );
+		Testing_Elevated_File::get_instance()->delete( self::FILE_RELATIVE_PATH );
 	}
 
 	/**

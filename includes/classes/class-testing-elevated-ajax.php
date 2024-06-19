@@ -60,7 +60,7 @@ class Testing_Elevated_AJAX {
 		}
 
 		// custom sanitization and validation.
-		$action = wp_unslash( $_REQUEST['action'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$action = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		return in_array( $action, $this->valid_actions, true );
 	}
 

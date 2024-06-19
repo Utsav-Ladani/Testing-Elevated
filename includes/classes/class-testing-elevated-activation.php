@@ -38,7 +38,7 @@ class Testing_Elevated_Activation {
 	 * @return void
 	 */
 	public function deactivate(): void {
-		// remove callback added by register_shutdown_function
+		// remove callback added by register_shutdown_function.
 		Testing_Elevated::get_instance()->commit();
 		Testing_Elevated::get_instance()->cleanup();
 		Testing_Elevated_Query::get_instance()->delete();
